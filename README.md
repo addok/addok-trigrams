@@ -25,7 +25,7 @@ In your local configuration file:
         …,
         'addok_trigrams.extend_results_removing_numbers',
         'addok_trigrams.extend_results_removing_one_whole_word',
-        'addok_trigrams.extend_results_removing_succesive_trigrams',
+        'addok_trigrams.extend_results_removing_successive_trigrams',
     ]
 
 - add `trigramize` to PROCESSORS:

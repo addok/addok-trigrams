@@ -63,7 +63,7 @@ def extend_results_removing_one_whole_word(helper):
                     return True
 
 
-def extend_results_removing_succesive_trigrams(helper):
+def extend_results_removing_successive_trigrams(helper):
     if helper.bucket_empty\
        or len(helper.meaningful) - 1 > helper.should_match_threshold:
         helper.debug('Trying to remove sucessive triplet of trigrams.')
