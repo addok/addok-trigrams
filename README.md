@@ -19,10 +19,12 @@ In your local configuration file:
 
 - remove `extend_results_reducing_tokens` from RESULTS_COLLECTORS
 
+        from addok.conf.default import RESULTS_COLLECTORS
+        RESULTS_COLLECTORS.remove('addok.helpers.collectors.extend_results_reducing_tokens')
+
 - add new RESULTS_COLLECTORS:
 
-        RESULTS_COLLECTORS = [
-            …,
+        RESULTS_COLLECTORS += [
             'addok_trigrams.extend_results_removing_numbers',
             'addok_trigrams.extend_results_removing_one_whole_word',
             'addok_trigrams.extend_results_removing_successive_trigrams',
