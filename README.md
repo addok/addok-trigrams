@@ -19,7 +19,7 @@ In your local configuration file:
 
 - remove `extend_results_reducing_tokens` from RESULTS_COLLECTORS
 
-        from addok.conf.default import RESULTS_COLLECTORS
+        from addok.config.default import RESULTS_COLLECTORS
         RESULTS_COLLECTORS.remove('addok.helpers.collectors.extend_results_reducing_tokens')
 
 - add new RESULTS_COLLECTORS:
