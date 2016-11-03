@@ -1,6 +1,6 @@
 import pytest
 
-from addok_trigrams.utils import compute_trigrams
+from addok_trigrams import compute_trigrams
 
 
 @pytest.mark.parametrize('given,expected', [
