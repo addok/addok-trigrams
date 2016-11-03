@@ -84,6 +84,13 @@ def preconfigure(config):
     hooks.block('addok.autocomplete')
 
 
+def configure(config):
+    # Do not split housenumbers string in trigrams as document keys (i.e.
+    # we want "19bis" once, and not "19b", "9bi", and so on).
+    from addok.helpers import keys
+    setattr(keys, 'housenumber_field_key', housenumber_field_key)
+
+
 VERSION = (0, 1, 0)
 
 __author__ = 'Yohan Boniface'
