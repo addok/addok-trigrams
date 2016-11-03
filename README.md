@@ -13,10 +13,6 @@ Alternative indexation pattern for Addok, based on trigrams.
 
 In your local configuration file:
 
-- blacklist `pairs`, `fuzzy` and `autocomplete` internal plugins
-
-        BLOCKED_PLUGINS = ['addok.pairs', 'addok.fuzzy', 'addok.autocomplete']
-
 - remove `extend_results_reducing_tokens` from RESULTS_COLLECTORS
 
         from addok.config.default import RESULTS_COLLECTORS

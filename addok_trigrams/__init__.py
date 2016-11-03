@@ -1,5 +1,6 @@
 "Trigram based algorithm for Addok."
 from addok.helpers.results import _match_housenumber
+from addok import hooks
 
 
 def housenumber_field_key(s):
@@ -75,6 +76,12 @@ def extend_results_removing_successive_trigrams(helper):
             helper.add_to_bucket(keys, limit=LADLEFUL)
             if helper.bucket_overflow:
                 return True
+
+
+def preconfigure(config):
+    hooks.block('addok.pairs')
+    hooks.block('addok.fuzzy')
+    hooks.block('addok.autocomplete')
 
 
 VERSION = (0, 1, 0)
