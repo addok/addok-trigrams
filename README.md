@@ -13,7 +13,7 @@ Alternative indexation pattern for Addok, based on trigrams.
 
 In your local configuration file:
 
-- remove `extend_results_reducing_tokens` from RESULTS_COLLECTORS
+- remove `extend_results_reducing_tokens` from RESULTS_COLLECTORS:
 
         from addok.config.default import RESULTS_COLLECTORS
         RESULTS_COLLECTORS.remove('addok.helpers.collectors.extend_results_reducing_tokens')
@@ -40,3 +40,17 @@ In your local configuration file:
             'addok_trigrams.match_housenumber',
             …,
         ]
+
+- remove `addok.pairs.pairs_indexer` and `addok.pairs.housenumbers_pairs_indexer`
+  from `INDEXERS`:
+
+        from addok.config.default import INDEXERS
+        INDEXERS.remove('addok.pairs.pairs_indexer')
+        INDEXERS.remove('addok.pairs.housenumbers_pairs_indexer')
+
+- remove `addok.pairs.pairs_deindexer` and `addok.pairs.housenumbers_pairs_deindexer`
+  from `DEINDEXERS`:
+
+        from addok.config.default import DEINDEXERS
+        DEINDEXERS.remove('addok.pairs.pairs_deindexer')
+        DEINDEXERS.remove('addok.pairs.housenumbers_pairs_deindexer')
