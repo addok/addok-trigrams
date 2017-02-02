@@ -41,16 +41,9 @@ In your local configuration file:
             …,
         ]
 
-- remove `addok.pairs.pairs_indexer` and `addok.pairs.housenumbers_pairs_indexer`
-  from `INDEXERS`:
+- remove pairs and autocomplete indexers from `INDEXERS`:
 
         from addok.config.default import INDEXERS
-        INDEXERS.remove('addok.pairs.pairs_indexer')
-        INDEXERS.remove('addok.pairs.housenumbers_pairs_indexer')
-
-- remove `addok.pairs.pairs_deindexer` and `addok.pairs.housenumbers_pairs_deindexer`
-  from `DEINDEXERS`:
-
-        from addok.config.default import DEINDEXERS
-        DEINDEXERS.remove('addok.pairs.pairs_deindexer')
-        DEINDEXERS.remove('addok.pairs.housenumbers_pairs_deindexer')
+        INDEXERS.remove('addok.pairs.PairsIndexer')
+        INDEXERS.remove('addok.pairs.HousenumbersPairsIndexer')
+        INDEXERS.remove('addok.autocomplete.EdgeNgramIndexer')
