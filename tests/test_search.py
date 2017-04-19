@@ -103,16 +103,16 @@ def test_should_do_autocomplete(street):
     assert search('wambre avenue', autocomplete=True)
 
 
-def test_synonyms_should_be_replaced(street, monkeypatch):
-    monkeypatch.setattr('addok.helpers.text.SYNONYMS',
-                        {'bd': 'boulevard'})
+def test_synonyms_should_be_replaced(street, config):
+    config.MIN_SCORE = 0
+    config.SYNONYMS = {'bd': 'boulevard'}
     street.update(name='boulevard des Fleurs')
     assert search('bd')
 
 
-def test_should_return_results_if_only_common_terms(factory, monkeypatch):
-    monkeypatch.setattr('addok.config.config.COMMON_THRESHOLD', 3)
-    monkeypatch.setattr('addok.config.config.BUCKET_LIMIT', 3)
+def test_should_return_results_if_only_common_terms(factory, config):
+    config.COMMON_THRESHOLD = 3
+    config.BUCKET_LIMIT = 3
     street1 = factory(name="rue de la monnaie", city="Vitry")
     street2 = factory(name="rue de la monnaie", city="Paris")
     street3 = factory(name="rue de la monnaie", city="Condom")
@@ -125,16 +125,16 @@ def test_should_return_results_if_only_common_terms(factory, monkeypatch):
     assert street4['id'] not in ids
 
 
-def test_not_found_term_is_autocompleted(factory, monkeypatch):
-    monkeypatch.setattr('addok.config.config.COMMON_THRESHOLD', 3)
-    monkeypatch.setattr('addok.config.config.BUCKET_LIMIT', 3)
+def test_not_found_term_is_autocompleted(factory, config):
+    config.COMMON_THRESHOLD = 3
+    config.BUCKET_LIMIT = 3
     factory(name="rue de la monnaie", city="Vitry")
     assert search('rue de la mon')
 
 
-def test_autocomplete_should_give_priority_to_nearby(factory, monkeypatch):
-    monkeypatch.setattr('addok.config.config.BUCKET_LIMIT', 3)
-    monkeypatch.setattr('addok.core.Search.SMALL_BUCKET_LIMIT', 2)
+def test_autocomplete_should_give_priority_to_nearby(factory, config):
+    config.BUCKET_LIMIT = 3
+    config.SMALL_BUCKET_LIMIT = 2
     expected = factory(name='Le Bourg', lat=48.1, lon=2.2, importance=0.09)
     factory(name='Le Bourg', lat=-48.1, lon=-2.2, importance=0.1)
     factory(name='Le Bourg', lat=8.1, lon=42.2, importance=0.1)

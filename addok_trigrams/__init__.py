@@ -15,6 +15,7 @@ def compute_trigrams(token):
         return [token]
     return [token[i:i+3] for i in range(0, max - 2)]
 
+
 LADLEFUL = 10
 
 
@@ -24,14 +25,6 @@ def trigramize(pipe):
         for trigram in compute_trigrams(token):
             yield token.update(trigram, position=position, raw=token)
             position += 1
-
-
-def match_housenumber(helper, result):
-    # Group by position.
-    tokens = {t.raw.position: t.raw for t in helper.tokens}
-    # Reorder by position.
-    tokens = [v for k, v in sorted(tokens.items())]
-    _match_housenumber(helper, result, tokens)
 
 
 def extend_results_removing_numbers(helper):

@@ -1,9 +1,21 @@
+import json
+
+from addok import ds
+from addok.batch import process_documents
 from addok.db import DB
-from addok.helpers.index import index_document, deindex_document
+
+
+def index_document(doc):
+    process_documents(json.dumps(doc))
+
+
+def deindex_document(_id):
+    process_documents(json.dumps({'_id': _id, '_action': 'delete'}))
 
 
 DOC = {
     'id': 'xxxx',
+    '_id': 'xxxx',
     'type': 'street',
     'name': 'rue des Lilas',
     'city': 'Andrésy',
@@ -20,8 +32,8 @@ DOC = {
 
 def test_index_document():
     index_document(DOC.copy())
-    assert DB.exists('d|xxxx')
-    assert DB.type('d|xxxx') == b'hash'
+    assert ds._DB.exists('d|xxxx')
+    assert ds._DB.type('d|xxxx') == b'string'
     assert DB.exists('w|rue')
     assert b'd|xxxx' in DB.zrange('w|rue', 0, -1)
     assert DB.exists('w|des')
@@ -33,20 +45,19 @@ def test_index_document():
     assert DB.exists('w|dre')
     assert DB.exists('w|res')
     assert DB.exists('w|esy')
-    assert DB.exists('w|un')  # Housenumber.
     assert DB.exists('g|u09dgm7')
     assert b'd|xxxx' in DB.smembers('g|u09dgm7')
     assert DB.exists('f|type|street')
     assert b'd|xxxx' in DB.smembers('f|type|street')
     assert DB.exists('f|type|housenumber')
     assert b'd|xxxx' in DB.smembers('f|type|housenumber')
-    assert len(DB.keys()) == 15
+    assert len(DB.keys()) == 13
 
 
 def test_deindex_document_should_deindex():
     index_document(DOC.copy())
     deindex_document(DOC['id'])
-    assert not DB.exists('d|xxxx')
+    assert not ds._DB.exists('d|xxxx')
     assert not DB.exists('w|des')
     assert not DB.exists('w|lil')
     assert not DB.exists('w|ila')
@@ -56,7 +67,6 @@ def test_deindex_document_should_deindex():
     assert not DB.exists('w|dre')
     assert not DB.exists('w|res')
     assert not DB.exists('w|esy')
-    assert not DB.exists('w|un')  # Housenumber.
     assert not DB.exists('g|u09dgm7')
     assert not DB.exists('f|type|street')
     assert not DB.exists('f|type|housenumber')
@@ -66,6 +76,7 @@ def test_deindex_document_should_deindex():
 def test_deindex_document_should_not_affect_other_docs():
     DOC2 = {
         'id': 'xxxx2',
+        '_id': 'xxxx2',
         'type': 'street',
         'name': 'rue des Lilas',
         'city': 'Paris',
@@ -81,11 +92,10 @@ def test_deindex_document_should_not_affect_other_docs():
     index_document(DOC.copy())
     index_document(DOC2)
     deindex_document(DOC['id'])
-    assert not DB.exists('d|xxxx')
+    assert not ds._DB.exists('d|xxxx')
     assert DB.exists('w|rue')
     assert DB.exists('w|des')
     assert DB.exists('w|lil')
-    assert DB.exists('w|un')  # Housenumber.
     assert b'd|xxxx' not in DB.zrange('w|rue', 0, -1)
     assert b'd|xxxx' not in DB.zrange('w|des', 0, -1)
     assert b'd|xxxx' not in DB.zrange('w|lil', 0, -1)
@@ -95,20 +105,20 @@ def test_deindex_document_should_not_affect_other_docs():
     assert b'd|xxxx2' in DB.zrange('w|rue', 0, -1)
     assert b'd|xxxx2' in DB.zrange('w|des', 0, -1)
     assert b'd|xxxx2' in DB.zrange('w|lil', 0, -1)
-    assert b'd|xxxx2' in DB.zrange('w|un', 0, -1)
     assert b'd|xxxx2' in DB.smembers('g|u09dgm7')
     assert b'd|xxxx2' in DB.smembers('g|u0g08g7')
     assert DB.exists('f|type|street')
     assert b'd|xxxx2' in DB.smembers('f|type|street')
     assert DB.exists('f|type|housenumber')
     assert b'd|xxxx2' in DB.smembers('f|type|housenumber')
-    assert len(DB.keys()) == 14
+    assert len(DB.keys()) == 12
 
 
 def test_index_housenumber_uses_housenumber_preprocessors():
     # By default it glues ordinal to number
     doc = {
         'id': 'xxxx',
+        '_id': 'xxxx',
         'type': 'street',
         'name': 'rue des Lilas',
         'city': 'Paris',
@@ -122,8 +132,9 @@ def test_index_housenumber_uses_housenumber_preprocessors():
         }
     }
     index_document(doc)
-    index = DB.hgetall('d|xxxx')
-    assert index[b'h|1bis'] == b'1 bis|48.325451|2.25651'
+    saved = ds.get_document('d|xxxx')
+    assert saved['housenumbers']['1bis'] == {
+        'lat': '48.325451', 'lon': '2.25651', 'raw': '1 bis'}
 
 
 # def test_allow_list_values():
@@ -143,6 +154,7 @@ def test_index_housenumber_uses_housenumber_preprocessors():
 def test_deindex_document_should_deindex_list_values():
     doc = {
         'id': 'xxxx',
+        '_id': 'xxxx',
         'type': 'street',
         'name': ['Vernou-la-Celle-sur-Seine', 'Vernou'],
         'city': 'Paris',
@@ -151,7 +163,7 @@ def test_deindex_document_should_deindex_list_values():
     }
     index_document(doc)
     deindex_document(doc['id'])
-    assert not DB.exists('d|xxxx')
+    assert not ds._DB.exists('d|xxxx')
     assert not DB.exists('w|ver')
     assert not DB.exists('w|sel')
     assert len(DB.keys()) == 0

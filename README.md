@@ -13,37 +13,27 @@ Alternative indexation pattern for Addok, based on trigrams.
 
 In your local configuration file:
 
-- remove `extend_results_reducing_tokens` from RESULTS_COLLECTORS:
+- remove `extend_results_reducing_tokens` from RESULTS_COLLECTORS_PYPATHS:
 
-        from addok.config.default import RESULTS_COLLECTORS
-        RESULTS_COLLECTORS.remove('addok.helpers.collectors.extend_results_reducing_tokens')
+        from addok.config.default import RESULTS_COLLECTORS_PYPATHS
+        RESULTS_COLLECTORS_PYPATHS.remove('addok.helpers.collectors.extend_results_reducing_tokens')
 
-- add new RESULTS_COLLECTORS:
+- add new RESULTS_COLLECTORS_PYPATHS:
 
-        RESULTS_COLLECTORS += [
+        RESULTS_COLLECTORS_PYPATHS += [
             'addok_trigrams.extend_results_removing_numbers',
             'addok_trigrams.extend_results_removing_one_whole_word',
             'addok_trigrams.extend_results_removing_successive_trigrams',
         ]
 
-- add `trigramize` to PROCESSORS:
+- add `trigramize` to PROCESSORS_PYPATHS:
 
-        PROCESSORS = [
-            …,
+        PROCESSORS_PYPATHS += [
             'addok_trigrams.trigramize',
         ]
 
-- replace `addok.helpers.results.match_housenumber` from SEARCH_RESULT_PROCESSORS
-  by the trigram dedicated one (usually at the first place of the list):
+- remove pairs and autocomplete indexers from `INDEXERS_PYPATHS`:
 
-        SEARCH_RESULT_PROCESSORS = [
-            'addok_trigrams.match_housenumber',
-            …,
-        ]
-
-- remove pairs and autocomplete indexers from `INDEXERS`:
-
-        from addok.config.default import INDEXERS
-        INDEXERS.remove('addok.pairs.PairsIndexer')
-        INDEXERS.remove('addok.pairs.HousenumbersPairsIndexer')
-        INDEXERS.remove('addok.autocomplete.EdgeNgramIndexer')
+        from addok.config.default import INDEXERS_PYPATHS
+        INDEXERS_PYPATHS.remove('addok.pairs.PairsIndexer')
+        INDEXERS_PYPATHS.remove('addok.autocomplete.EdgeNgramIndexer')
