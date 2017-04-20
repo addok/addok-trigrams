@@ -1,5 +1,3 @@
-"Trigram based algorithm for Addok."
-from addok.helpers.results import _match_housenumber
 from addok import hooks
 
 
@@ -82,11 +80,3 @@ def configure(config):
     # we want "19bis" once, and not "19b", "9bi", and so on).
     from addok.helpers import keys
     setattr(keys, 'housenumber_field_key', housenumber_field_key)
-
-
-VERSION = (0, 1, 0)
-
-__author__ = 'Yohan Boniface'
-__contact__ = "yohan.boniface@data.gouv.fr"
-__homepage__ = "https://github.com/addok/addok-trigrams"
-__version__ = ".".join(map(str, VERSION))
