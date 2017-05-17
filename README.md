@@ -3,13 +3,12 @@
 Alternative indexation pattern for Addok, based on trigrams.
 
 
-# Installation
+## Installation
 
-    # No pypi release yet.
-    pip install git+https://github.com/addok/addok-trigrams
+    pip install addok-trigrams
 
 
-# Configuration
+## Configuration
 
 In your local configuration file:
 
@@ -37,3 +36,10 @@ In your local configuration file:
         from addok.config.default import INDEXERS_PYPATHS
         INDEXERS_PYPATHS.remove('addok.pairs.PairsIndexer')
         INDEXERS_PYPATHS.remove('addok.autocomplete.EdgeNgramIndexer')
+
+
+## Usage
+
+Use `addok batch` just like with genuine addok for importing documents, but no
+need for running `addok ngrams`, given they are already part of the index
+strategy.
