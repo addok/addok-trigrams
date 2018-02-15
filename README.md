@@ -27,6 +27,7 @@ In your local configuration file:
 
 - add `trigramize` to PROCESSORS_PYPATHS:
 
+        from addok.config.default import PROCESSORS_PYPATHS
         PROCESSORS_PYPATHS += [
             'addok_trigrams.trigramize',
         ]
