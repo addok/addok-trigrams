@@ -12,12 +12,17 @@ Alternative indexation pattern for Addok, based on trigrams.
 
 In your local configuration file:
 
-- remove `extend_results_reducing_tokens` from RESULTS_COLLECTORS_PYPATHS:
+- remove unwanted RESULTS_COLLECTORS_PYPATHS:
 
         from addok.config.default import RESULTS_COLLECTORS_PYPATHS
         RESULTS_COLLECTORS_PYPATHS.remove('addok.helpers.collectors.extend_results_reducing_tokens')
+        RESULTS_COLLECTORS_PYPATHS.remove('addok.autocomplete.only_commons_but_geohash_try_autocomplete_collector')
+        RESULTS_COLLECTORS_PYPATHS.remove('addok.autocomplete.no_meaningful_but_common_try_autocomplete_collector')
+        RESULTS_COLLECTORS_PYPATHS.remove('addok.autocomplete.only_commons_try_autocomplete_collector')
+        RESULTS_COLLECTORS_PYPATHS.remove('addok.autocomplete.autocomplete_meaningful_collector')
+        RESULTS_COLLECTORS_PYPATHS.remove('addok.fuzzy.fuzzy_collector')
 
-- add new RESULTS_COLLECTORS_PYPATHS:
+- remove all `autocomplete` and `fuzzy` RESULTS_COLLECTORS_PYPATHS, add new ones:
 
         RESULTS_COLLECTORS_PYPATHS += [
             'addok_trigrams.extend_results_removing_numbers',
