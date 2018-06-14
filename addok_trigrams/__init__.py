@@ -1,4 +1,5 @@
 from addok import hooks
+from addok.config import config
 
 
 def housenumber_field_key(s):
@@ -6,7 +7,7 @@ def housenumber_field_key(s):
 
 
 def compute_trigrams(token):
-    if token.isdigit():
+    if config.TRIGRAM_SKIP_DIGIT and token.isdigit():
         return [token]
     max = len(token)
     if max < 3:
@@ -73,6 +74,7 @@ def preconfigure(config):
     hooks.block('addok.pairs')
     hooks.block('addok.fuzzy')
     hooks.block('addok.autocomplete')
+    config.TRIGRAM_SKIP_DIGIT = True
 
 
 def configure(config):
