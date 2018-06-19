@@ -6,7 +6,7 @@ from os import path
 from setuptools import find_packages, setup
 
 
-VERSION = (1, 0, 0)
+VERSION = (1, 1, 0)
 
 here = path.abspath(path.dirname(__file__))
 
@@ -27,6 +27,7 @@ setup(
     version='.'.join(map(str, VERSION)),
     description=__doc__,
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/addok/addok-trigrams',
     author='Yohan Boniface',
     author_email='yohan.boniface@data.gouv.fr',
