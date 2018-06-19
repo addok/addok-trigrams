@@ -43,6 +43,9 @@ In your local configuration file:
         INDEXERS_PYPATHS.remove('addok.pairs.PairsIndexer')
         INDEXERS_PYPATHS.remove('addok.autocomplete.EdgeNgramIndexer')
 
+By default, digit only words are not turned into trigrams. To prevent this,
+set `TRIGRAM_SKIP_DIGIT=False`.
+
 
 ## Usage
 

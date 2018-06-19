@@ -19,6 +19,7 @@ DOC = {
     'type': 'street',
     'name': 'rue des Lilas',
     'city': 'Andrésy',
+    'postcode': '12345',
     'lat': '48.32545',
     'lon': '2.2565',
     'housenumbers': {
@@ -45,13 +46,14 @@ def test_index_document():
     assert DB.exists('w|dre')
     assert DB.exists('w|res')
     assert DB.exists('w|esy')
+    assert DB.exists('w|12345')
     assert DB.exists('g|u09dgm7')
     assert b'd|xxxx' in DB.smembers('g|u09dgm7')
     assert DB.exists('f|type|street')
     assert b'd|xxxx' in DB.smembers('f|type|street')
     assert DB.exists('f|type|housenumber')
     assert b'd|xxxx' in DB.smembers('f|type|housenumber')
-    assert len(DB.keys()) == 13
+    assert len(DB.keys()) == 15
 
 
 def test_deindex_document_should_deindex():
@@ -207,3 +209,21 @@ def test_field_with_only_non_alphanumeric_chars_is_not_indexed():
     }
     index_document(doc)
     assert 'city' not in DB.hgetall('d|xxxx')
+
+
+def test_index_document_with_skip_digit_false(config):
+    from addok.helpers.index import _CACHE
+    _CACHE.clear()  # Do this in addok.pytest teardown?
+    config.TRIGRAM_SKIP_DIGIT = False
+    index_document(DOC.copy())
+    assert DB.exists('w|123')
+    assert DB.exists('w|234')
+    assert DB.exists('w|345')
+    assert len(DB.keys()) == 17
+
+
+def test_deindex_document_with_skip_digit_false(config):
+    config.TRIGRAM_SKIP_DIGIT = False
+    index_document(DOC.copy())
+    deindex_document(DOC['id'])
+    assert len(DB.keys()) == 0
