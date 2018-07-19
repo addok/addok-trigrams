@@ -57,14 +57,15 @@ def extend_results_removing_one_whole_word(helper):
 
 
 def extend_results_removing_successive_trigrams(helper):
-    if helper.bucket_empty\
-       or len(helper.meaningful) - 1 > helper.should_match_threshold:
+    slot = 3
+    if len(helper.meaningful) > slot + 1 and (helper.bucket_empty
+       or len(helper.meaningful) - 1 > helper.should_match_threshold):
         helper.debug('Trying to remove sucessive triplet of trigrams.')
         helper.meaningful.sort(key=lambda x: x.position)
         for i in range(len(helper.meaningful)):
-            helper.debug('Removing trigrams %s.', helper.meaningful[i:i+3])
+            helper.debug('Removing trigrams %s.', helper.meaningful[i:i+slot])
             keys = [t.db_key for t
-                    in (helper.meaningful[:i] + helper.meaningful[i + 3:])]
+                    in (helper.meaningful[:i] + helper.meaningful[i + slot:])]
             helper.add_to_bucket(keys, limit=LADLEFUL)
             if helper.bucket_overflow:
                 return True
