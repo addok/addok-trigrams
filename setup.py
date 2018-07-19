@@ -6,7 +6,7 @@ from os import path
 from setuptools import find_packages, setup
 
 
-VERSION = (1, 1, 0)
+VERSION = (1, 1, 1)
 
 here = path.abspath(path.dirname(__file__))
 
