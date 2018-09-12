@@ -5,6 +5,7 @@ Alternative indexation pattern for Addok, based on trigrams.
 
 ## Installation
 
+    sudo apt-get install python-setuptools
     pip install addok-trigrams
 
 
