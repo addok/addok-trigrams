@@ -19,9 +19,6 @@ def is_pkg(line):
     return line and not line.startswith(('--', 'git', '#'))
 
 
-with open('requirements.txt', encoding='utf-8') as reqs:
-    install_requires = [l for l in reqs.read().split('\n') if is_pkg(l)]
-
 setup(
     name='addok-trigrams',
     version='.'.join(map(str, VERSION)),
@@ -47,7 +44,6 @@ setup(
     ],
     keywords='addok geocoding',
     packages=find_packages(exclude=['tests']),
-    install_requires=install_requires,
     extras_require={'test': ['pytest']},
     include_package_data=True,
     entry_points={'addok.ext': ['trigrams=addok_trigrams']},
