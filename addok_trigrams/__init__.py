@@ -72,9 +72,10 @@ def extend_results_removing_successive_trigrams(helper):
 
 
 def preconfigure(config):
-    hooks.block('addok.pairs')
-    hooks.block('addok.fuzzy')
-    hooks.block('addok.autocomplete')
+    reason = "Blocked by addok-trigrams"
+    hooks.block('addok.pairs', reason=reason)
+    hooks.block('addok.fuzzy', reason=reason)
+    hooks.block('addok.autocomplete', reason=reason)
     config.TRIGRAM_SKIP_DIGIT = True
 
 
